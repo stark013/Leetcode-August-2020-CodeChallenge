@@ -1,0 +1,46 @@
+class CombinationIterator {
+public:
+    string s;
+    bool combs[15];
+    int k;
+    bool hasMoreCombs = true;
+    void advanceCombs() {
+        
+        for (int i = s.size() - 1; i; i--) {
+            if (!combs[i] && combs[i - 1]) {
+                swap(combs[i], combs[i - 1]);
+                sort(begin(combs) + i + 1, begin(combs) + s.size(), greater<>());
+                return;
+            }
+        }
+        hasMoreCombs = false;
+    }
+    
+    CombinationIterator(string &characters, int combinationLength) {
+        s = characters;
+        k = combinationLength;
+        
+        for (int i = 0; i < 15; i++) combs[i] = i <  k;
+    }
+    
+    string next() {
+        
+        string res;
+        for (int i = 0; i < s.size(); i++) if (combs[i]) res.push_back(s[i]);
+     
+        advanceCombs();
+        return res;
+    }
+    
+    bool hasNext() {
+       
+        return hasMoreCombs;
+    }
+};
+
+/**
+ * Your CombinationIterator object will be instantiated and called as such:
+ * CombinationIterator* obj = new CombinationIterator(characters, combinationLength);
+ * string param_1 = obj->next();
+ * bool param_2 = obj->hasNext();
+ */
